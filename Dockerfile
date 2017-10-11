@@ -16,6 +16,7 @@ RUN apk --no-cache add ca-certificates wget \
     && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.26-r0/glibc-2.26-r0.apk \
     && apk add glibc-2.26-r0.apk
 
+# Install Scala
 RUN \
   echo "$SCALA_VERSION $SBT_VERSION" && \
   mkdir -p /usr/lib/jvm/java-1.8-openjdk/jre && \
@@ -27,18 +28,20 @@ RUN \
   scala -version && \
   scalac -version
 
+# Install sbt
 RUN \
   curl -fsL https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz | tar xfz - -C /usr/local && \
   $(mv /usr/local/sbt-launcher-packaging-$SBT_VERSION /usr/local/sbt || true) \
   ln -s /usr/local/sbt/bin/* /usr/local/bin/ && \
   sbt sbtVersion
 
+# Install aws-cli
 RUN apk --no-cache update && \
     apk --no-cache add python py-pip py-setuptools ca-certificates curl groff less && \
     pip --no-cache-dir install awscli && \
     rm -rf /var/cache/apk/*
 
-# Teraform
+# Install Teraform
 RUN apk add --update git bash wget curl openssh && \
     curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     echo "${TERRAFORM_SHA256SUM}  terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
