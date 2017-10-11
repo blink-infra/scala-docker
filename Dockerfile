@@ -10,6 +10,12 @@ ENV SBT_VERSION ${SBT_VERSION:-1.0.2}
 ENV TERRAFORM_VERSION=0.10.6
 ENV TERRAFORM_SHA256SUM=fbb4c37d91ee34aff5464df509367ab71a90272b7fab0fbd1893b367341d6e23
 
+# Install glibc
+RUN apk --no-cache add ca-certificates wget \
+    && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub \
+    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.26-r0/glibc-2.26-r0.apk \
+    && apk add glibc-2.26-r0.apk
+
 RUN \
   echo "$SCALA_VERSION $SBT_VERSION" && \
   mkdir -p /usr/lib/jvm/java-1.8-openjdk/jre && \
