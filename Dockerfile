@@ -48,3 +48,10 @@ RUN apk add --update git bash wget curl openssh && \
     sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+# Install Docker (for remote builds)
+RUN set -x &&\
+    VER="latest" &&\
+    curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz &&\
+    tar -xz -C /tmp -f /tmp/docker-$VER.tgz &&\
+    mv /tmp/docker/* /usr/bin
